@@ -1,5 +1,5 @@
 import axios, { Axios } from 'axios';
-import { IHttpService, Data } from './types';
+import { IHttpService } from './types';
 import { API_HOST } from '../../constants';
 
 class HttpService implements IHttpService {

@@ -14,7 +14,7 @@ function AreaChart(props: Props) {
     return (
         <ResponsiveContainer width={'100%'} height={100}>
             <Chart width={width} height={height} data={data}>
-                <Area type={'monotone'} dataKey={'value'} stroke={color} fill={color} />
+                <Area isAnimationActive={false} type={'monotone'} dataKey={'value'} stroke={color} fill={color} />
             </Chart>
         </ResponsiveContainer>
     );

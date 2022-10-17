@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {inject, observer} from 'mobx-react';
+import { useSubscription } from 'mqtt-react-hooks';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { StatisticCard } from '../../client-ui/shared/components/StatisticCard';
@@ -14,7 +15,20 @@ type Props = {
 
 function DashboardPage(props: Props) {
 	const { dashboardStore: store } = props;
+	const [data, setData] = useState(store.data);
 	const [open, setOpen] = useState(false);
+	const { message } = useSubscription([
+		'wbtest/sensors/temperature_indoor'
+	]);
+
+	useEffect(() => {
+		message?.message && store.updateTestWSData(message?.message)
+	}, []);
+
+	useEffect(() => {
+		message?.message && store.updateTestWSData(message?.message);
+		setData(store.getData())
+	}, [store, message]);
 
 	const handleAddCardData = (item: DashboardData) => store.addData(item);
 
@@ -27,7 +41,7 @@ function DashboardPage(props: Props) {
 		<Grid container spacing={2} direction={'column'}>
 			<Grid item>{'Dashboard'}</Grid>
 			<Grid item display={'flex'} flexWrap={'wrap'}>
-				{ store.data.map((item: DashboardData) => (
+				{ data.map((item: DashboardData) => (
 					<Box mr={1.5} mb={1.5}>
 						<StatisticCard
 							key={item?.id}
